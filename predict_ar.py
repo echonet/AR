@@ -51,26 +51,27 @@ else:
     ### Set up dataloader
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
 
-    ### Load model
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    model = load_model(device, weights_path=weights_path, num_classes=len(NEURON_NAMES))
-
-    filenames = []
-    predictions = []
-    ### Run inference on each batch
-    for idx, (batch_filenames, batch_tensor) in tqdm.tqdm(enumerate(dataloader)):
-        batch_tensor = batch_tensor.to(device)
-        output = torch.softmax(model(batch_tensor), dim=1)  # output from model
-        predictions.append(output.detach().cpu())  # output from model
-        filenames.extend(batch_filenames)
-
-    predictions = torch.cat(predictions, dim=0).T  # num_neurons x num_samples
-    ### Create dataframe with columns for filename and predictions
-    dataframe = {"filename": filenames}
-
-    for key, value in zip(NEURON_NAMES, predictions):
-        dataframe[key] = value
-
-    dataframe = pd.DataFrame(dataframe)
-    ### Save predictions to file
-    dataframe.to_csv(f"predictions_{weights_path.stem}.csv", index=None)
+    with torch.no_grad():
+        ### Load model
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        model = load_model(device, weights_path=weights_path, num_classes=len(NEURON_NAMES))
+    
+        filenames = []
+        predictions = []
+        ### Run inference on each batch
+        for idx, (batch_filenames, batch_tensor) in tqdm.tqdm(enumerate(dataloader)):
+            batch_tensor = batch_tensor.to(device)
+            output = torch.softmax(model(batch_tensor), dim=1)  # output from model
+            predictions.append(output.cpu())  # output from model
+            filenames.extend(batch_filenames)
+    
+        predictions = torch.cat(predictions, dim=0).T  # num_neurons x num_samples
+        ### Create dataframe with columns for filename and predictions
+        dataframe = {"filename": filenames}
+    
+        for key, value in zip(NEURON_NAMES, predictions):
+            dataframe[key] = value
+    
+        dataframe = pd.DataFrame(dataframe)
+        ### Save predictions to file
+        dataframe.to_csv(f"predictions_{weights_path.stem}.csv", index=None)
