@@ -29,7 +29,7 @@ This repo was tested in the January 2024 edition of the official Nvidia PyTorch 
 
 This script accepts a path to a directory containing A4C TTE echoes in DICOM format, and predicts the presence of left ventricular outflow tract (LVOT) obstruction. \
 To run inference: 
-1. Download the weights files. Place them in the same folder as the scripts predict_lvoto.py and utils.py.
+1. Download the weights files. Place them in the same folder as the scripts predict_ar.py and utils.py.
 2. Run the following command:\
     python predict_ar.py --data_path <path_to_directory> --weights_path <path_to_weights_file>
     where **--data_path** is the full path to a directory of DICOM files; files must be of A4C TTEs
