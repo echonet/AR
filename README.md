@@ -26,7 +26,7 @@ The model uses a 3D convolutional neural network architecture (R2+1D) which has 
 ## Running Inference 
 This repo was tested in the January 2024 edition of the official Nvidia PyTorch Docker image, which comes packaged with Python 3.10, PyTorch 2.2, NumPy 1.24.4, and Pandas 1.5.3.
 
-This script accepts a path to a directory containing TTE echoes of the respective view (PLAX, PLAX-AV, A3C, A3C-AV or A5C) in DICOM format, and predicts the severity of aortic regurgitation. \
+This script accepts a path to a directory containing TTE echoes of the respective view (PLAX, PLAX_AV_MV, A3C, A3C_AV or A5C) in DICOM format, and predicts the severity of aortic regurgitation. \
 To run inference: 
 1. Download the weights files of the correct view. Place them in the same folder as the scripts predict_ar.py and utils.py.
 2. Run the following command:\
